@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-
-
 import javax.mail.*;
 import javax.mail.internet.*;
 
@@ -44,23 +42,12 @@ public class EmailController {
     
     EmailResponse emailResponse = new EmailResponse();
     
-    // Recipient's email ID needs to be mentioned.
-    //Todo:   Need to update this to use the full array and not just the first item
-    String to = emailRequest.getRecipients()[0];
-
-    // Sender's email ID needs to be mentioned
-    String from = emailConfig.getFromName();
-
-    // Get the host name from application.yml
-    String host = emailConfig.getHost();
-
-    // Get system properties
-    Properties properties = System.getProperties();
+    Properties properties = new Properties();
 
     // Setup mail server
     String apikey = System.getenv("MAIL_PASSWORD");
-    //LOGGER.info("the passord is: " + apikey);
-    properties.setProperty("mail.smtp.host", host);
+
+    properties.setProperty("mail.smtp.host", emailConfig.getHost());
     properties.setProperty("mail.smtp.auth", "true");
 
     // Get the Session object.
@@ -73,30 +60,31 @@ public class EmailController {
     );
 
     try {
-        // Create a default MimeMessage object.
-        MimeMessage message = new MimeMessage(session);
 
-        // Set From: header field of the header.
-        message.setFrom(new InternetAddress(from, emailConfig.getFromName()));
+      // Create a default MimeMessage object.
+      MimeMessage message = new MimeMessage(session);
 
-        // Set To: header field of the header.
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+      // Set From: header field of the header.
+      message.setFrom(new InternetAddress(emailConfig.getFromEmail(), emailConfig.getFromName()));
 
-        // Set Subject: header field
-        message.setSubject(emailRequest.getSubject());
+      // Set To: header field of the header.
+      String[] recipients = emailRequest.getRecipients();
+      for (int i=0;i<recipients.length;i++) {
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipients[i]));
+      }
+      // Set Subject: header field
+      message.setSubject(emailRequest.getSubject());
 
-        // Now set the actual message
-        message.setText(emailRequest.getMessageBody());
+      // Now set the actual message
+      message.setText(emailRequest.getMessageBody());
 
-        // Send message
-        Transport.send(message);
-        //System.out.println("Sent message successfully....");
+      // Send message
+      Transport.send(message);
+      //System.out.println("Sent message successfully....");
 
-        emailResponse.setResponseMessage("Email sent");
+      emailResponse.setResponseMessage("Email sent");
 
-//        return ResponseEntity.ok().body(emailResponse);
-
-    } catch (MessagingException | UnsupportedEncodingException mex) {
+    } catch (MessagingException | UnsupportedEncodingException | IllegalStateException mex) {
         mex.printStackTrace();
 
         emailResponse.setResponseMessage("Error: " + mex.toString());
