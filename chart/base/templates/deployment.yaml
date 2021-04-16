@@ -58,6 +58,11 @@ spec:
               value: ""
             - name: PROTOCOLS
               value: ""
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mailCredentialsSecret }}
+                  key: password
             - name: LOG_LEVEL
               value: {{ .Values.logLevel | quote }}
             {{- if .Values.cloudantBinding }}

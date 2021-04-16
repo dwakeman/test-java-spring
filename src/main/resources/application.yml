@@ -21,6 +21,11 @@ hello:
 greetingservice:
   beanName: "hola"
 
+email:
+  host: "smtp.sendgrid.net"
+  fromEmail: "dwakeman@us.ibm.com"
+  fromName: "EyeBeeM Communications"
+
 swagger:
   baseApiPackage:
   - "com.ibm.hello"

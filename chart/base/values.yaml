@@ -48,3 +48,5 @@ partOf: inventory
 connectsTo: ""
 
 runtime: spring
+
+mailCredentialsSecret: mail-credentials

@@ -20,6 +20,6 @@ spec:
         - name: CLOUD_NAME
           value: openshift
         - name: NAMESPACE
-          value: dw-spring-dev
+          value: dw-java-spring-dev
         - name: BRANCH
           value: master
