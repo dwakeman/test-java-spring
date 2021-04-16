@@ -47,15 +47,22 @@ public class EmailController {
     // Get the API Key to use as the password for the mail server
     String apikey = System.getenv("MAIL_PASSWORD");
 
-    //Get the Preshared Key to use for authorization to use this service
+    // Get the Preshared Key to use for authorization to use this service
     String presharedKey = System.getenv("MAIL_PRESHARED_KEY");
 
     // Check and see if the preshared key was provided
     String inputKey = emailRequest.getPresharedKey();
     LOGGER.info("the provided key is " + inputKey);
-    LOGGER.info("the preshared key is " + presharedKey);
-    if (!inputKey.equals(presharedKey)) {
-      emailResponse.setResponseMessage("Error: No Preshared Key provided or key is not valid");
+    //LOGGER.info("the preshared key is " + presharedKey);
+
+    // Is it the right key?
+    if ((inputKey == null) || (!inputKey.equals(presharedKey))) {
+      if (inputKey == null) {
+        emailResponse.setResponseMessage("Error: No Preshared Key provided");
+      } else {
+        emailResponse.setResponseMessage("Error: Preshared Key is not valid");
+      }
+      
       return ResponseEntity.status(403).body(emailResponse);
     }
 
