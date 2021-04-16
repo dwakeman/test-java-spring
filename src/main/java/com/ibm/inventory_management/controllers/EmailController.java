@@ -44,8 +44,20 @@ public class EmailController {
     
     Properties properties = new Properties();
 
-    // Setup mail server
+    // Get the API Key to use as the password for the mail server
     String apikey = System.getenv("MAIL_PASSWORD");
+
+    //Get the Preshared Key to use for authorization to use this service
+    String presharedKey = System.getenv("MAIL_PRESHARED_KEY");
+
+    // Check and see if the preshared key was provided
+    String inputKey = emailRequest.getPresharedKey();
+    LOGGER.info("the provided key is " + inputKey);
+    LOGGER.info("the preshared key is " + presharedKey);
+    if (!inputKey.equals(presharedKey)) {
+      emailResponse.setResponseMessage("Error: No Preshared Key provided or key is not valid");
+      return ResponseEntity.status(403).body(emailResponse);
+    }
 
     properties.setProperty("mail.smtp.host", emailConfig.getHost());
     properties.setProperty("mail.smtp.auth", "true");

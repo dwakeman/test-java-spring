@@ -7,6 +7,7 @@ public class EmailRequest implements Serializable {
   private String subject;
   private String[] recipients;
   private String messageBody;
+  private String presharedKey;
 
   public EmailRequest() {
     super();
@@ -44,5 +45,12 @@ public class EmailRequest implements Serializable {
     this.messageBody = messageBody;
   }
 
+  public String getPresharedKey() {
+    return presharedKey;
+  }
+
+  public void setPresharedKey(String key) {
+    this.presharedKey = key;
+  }
 
 }
