@@ -24,7 +24,7 @@ greetingservice:
 email:
   host: "smtp.sendgrid.net"
   fromEmail: "dwakeman@us.ibm.com"
-  fromName: "EyeBeeM Communications"
+  fromName: "EyeBeeM_Communications"
 
 swagger:
   baseApiPackage:
